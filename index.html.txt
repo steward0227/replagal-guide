@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replagal (Agalsidase alfa) 輸注前給藥與減敏臨床指引</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .vibrant-gradient {
+            background: linear-gradient(135deg, #1E3A8A 0%, #14B8A6 100%);
+        }
+        .flow-line {
+            width: 4px;
+            height: 3rem;
+            background-color: #14B8A6;
+            margin: 0 auto;
+        }
+        .flow-arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid #14B8A6;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased leading-relaxed">
+
+    <!-- Palette: Vibrant Clinical (Deep Blue #1E3A8A, Teal #14B8A6, Amber #F59E0B, Rose #E11D48) -->
+    <header class="vibrant-gradient text-white py-16 px-6 shadow-lg mb-10">
+        <div class="max-w-5xl mx-auto">
+            <div class="inline-block px-3 py-1 bg-amber-500 text-blue-900 font-bold rounded-full text-sm mb-4">專家級臨床決策指引 (Expert Decision System)</div>
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">Replagal 輸注前給藥與減敏治療指引</h1>
+            <p class="text-lg md:text-xl font-light opacity-90 max-w-3xl">
+                彙整多方醫學共識、預防用藥劑量與時機，並收錄「重度過敏減敏程序」與臨床案例解析之實戰指引。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 pb-20">
+        
+        <!-- SECTION 1: Why Premedication? -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6 border-b-4 border-teal-500 inline-block pb-2">為什麼需要 Premedication？</h2>
+            <p class="text-lg mb-8 text-gray-600">
+                Replagal (agalsidase alfa) 是一種酵素替代療法。在臨床試驗與實際應用中，部分患者的免疫系統會對外來蛋白質產生反應，引發發燒、畏寒、皮疹或血壓變化等輸注相關反應 (IRRs)。事前給予預防性藥物能顯著降低不良反應的發生率與嚴重程度。
+            </p>
+            
+            <div class="bg-white rounded-xl shadow-md p-8 md:flex items-center gap-10">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <div class="chart-container">
+                        <canvas id="irrChart"></canvas>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-bold text-teal-600 mb-4">輸注相關反應 (IRRs) 發生率</h3>
+                    <p class="text-gray-700 mb-4">
+                        在未常規使用預防性給藥或初期接受治療的成人患者中，大約有 13.7% 的患者會經歷至少一次反應，其中多數反應發生在治療開始的前 2 至 4 個月。
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <span class="w-4 h-4 rounded-full bg-rose-600 mr-3"></span>
+                            <span class="font-semibold">發生 IRRs (約 13.7%)</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-4 h-4 rounded-full bg-teal-500 mr-3"></span>
+                            <span class="font-semibold">無明顯反應 (約 86.3%)</span>
+                        </li>
+                    </ul>
+                    <p class="mt-6 text-sm text-amber-600 font-bold bg-amber-50 p-3 rounded-lg">
+                        臨床觀點：雖然 Replagal 在人體細胞株中生產、免疫原性相對較低，但部分產生高滴度中和抗體 (ADA) 的患者，其 IRR 發生率及嚴重度會顯著增加。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Guidelines and Sources Comparison -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6 border-b-4 border-teal-500 inline-block pb-2">不同醫學來源之 Premedication 建議</h2>
+            <p class="text-lg mb-6 text-gray-600 font-light">
+                各國藥物監管單位、臨床專家共識與高風險處置方案，在給藥時機與策略上略有差異：
+            </p>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <!-- Tabs navigation -->
+                <div class="flex border-b border-gray-200 bg-gray-100">
+                    <button onclick="switchSourceTab('ema')" id="tab-ema" class="flex-1 py-4 px-6 text-center font-bold text-sm md:text-base border-b-2 border-teal-500 text-teal-600 transition-all duration-200">
+                        🇪🇺 EMA 歐盟官方仿單
+                    </button>
+                    <button onclick="switchSourceTab('consensus')" id="tab-consensus" class="flex-1 py-4 px-6 text-center font-bold text-sm md:text-base border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all duration-200">
+                        🇹🇼 亞太與台灣臨床共識
+                    </button>
+                    <button onclick="switchSourceTab('highrisk')" id="tab-highrisk" class="flex-1 py-4 px-6 text-center font-bold text-sm md:text-base border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all duration-200">
+                        ⚠️ 高敏抗體/高風險方案
+                    </button>
+                </div>
+
+                <!-- Tab content container -->
+                <div class="p-8">
+                    <!-- EMA -->
+                    <div id="content-ema" class="space-y-4">
+                        <div class="flex items-center gap-3 text-xl font-bold text-blue-900">
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2.5 py-1 rounded-full">歐洲醫學會 EMA</span>
+                            <span>官方仿單建議 (Product Monograph)</span>
+                        </div>
+                        <p class="text-gray-600">對於曾發生過輕、中度輸注相關反應且需要維持治療的患者，官方仿單建議：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="font-bold text-blue-900 text-sm mb-1">⏰ 給藥時機</div>
+                                <div class="text-lg font-extrabold text-blue-700">輸注前 1 ~ 24 小時</div>
+                                <p class="text-xs text-gray-500 mt-2">提供充足的體內藥物分布與阻斷反應時間。</p>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="font-bold text-blue-900 text-sm mb-1">💊 藥物類別</div>
+                                <div class="text-lg font-extrabold text-blue-700">抗組織胺與/或皮質類固醇</div>
+                                <p class="text-xs text-gray-500 mt-2">可單獨使用或合併口服/靜脈給藥。</p>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="font-bold text-blue-900 text-sm mb-1">🎯 適用對象</div>
+                                <div class="text-lg font-extrabold text-blue-700">曾發生過 IRR 者</div>
+                                <p class="text-xs text-gray-500 mt-2">非所有患者皆需常規強制給予，通常為反應後預防。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CLINICAL CONSENSUS -->
+                    <div id="content-consensus" class="hidden space-y-4">
+                        <div class="flex items-center gap-3 text-xl font-bold text-teal-800">
+                            <span class="bg-teal-100 text-teal-800 text-xs px-2.5 py-1 rounded-full">臨床共識</span>
+                            <span>台灣及亞太實務操作習慣</span>
+                        </div>
+                        <p class="text-gray-600">考量到門診與日間留觀的便利性，亞太醫學中心及多數台灣法布瑞氏症專科醫師建議：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div class="bg-teal-50 p-4 rounded-lg">
+                                <div class="font-bold text-teal-900 text-sm mb-1">⏰ 給藥時機</div>
+                                <div class="text-lg font-extrabold text-teal-700">輸注前 30 ~ 60 分鐘</div>
+                                <p class="text-xs text-gray-500 mt-2">於院所門診或準備滴注前，由醫護人員直接給藥。</p>
+                            </div>
+                            <div class="bg-teal-50 p-4 rounded-lg">
+                                <div class="font-bold text-teal-900 text-sm mb-1">💊 藥物與劑量</div>
+                                <div class="text-md font-extrabold text-teal-700">Acetaminophen 500-1000mg + Antihistamines</div>
+                                <p class="text-xs text-gray-500 mt-2">例如：Diphenhydramine 25-50mg 口服或靜脈慢速注射。</p>
+                            </div>
+                            <div class="bg-teal-50 p-4 rounded-lg">
+                                <div class="font-bold text-teal-900 text-sm mb-1">🎯 適用對象</div>
+                                <div class="text-lg font-extrabold text-teal-700">首次滴注及高滴度 ADA 體質</div>
+                                <p class="text-xs text-gray-500 mt-2">許多中心對於前幾次輸注採取全面預防性給藥。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HIGH RISK PROTOCOL -->
+                    <div id="content-highrisk" class="hidden space-y-4">
+                        <div class="flex items-center gap-3 text-xl font-bold text-rose-800">
+                            <span class="bg-rose-100 text-rose-800 text-xs px-2.5 py-1 rounded-full">高風險方案</span>
+                            <span>重度抗體/中和抗體陽性預防</span>
+                        </div>
+                        <p class="text-gray-600">針對中和抗體滴度極高、反覆發生 IRR、或曾有氣喘/過敏體質之高危險患者：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div class="bg-rose-50 p-4 rounded-lg">
+                                <div class="font-bold text-rose-900 text-sm mb-1">⏰ 給藥時機</div>
+                                <div class="text-lg font-extrabold text-rose-700">前晚(12H前) + 輸注前(1H前)</div>
+                                <p class="text-xs text-gray-500 mt-2">採取兩階段(雙重)給藥法，確保肥大細胞高度穩定。</p>
+                            </div>
+                            <div class="bg-rose-50 p-4 rounded-lg">
+                                <div class="font-bold text-rose-900 text-sm mb-1">💊 聯合用藥</div>
+                                <div class="text-md font-extrabold text-rose-700">類固醇 + 抗組織胺 + 胃壁保護劑</div>
+                                <p class="text-xs text-gray-500 mt-2">如 Prednisolone、H1 + H2 Blocker、Acetaminophen 三聯療法。</p>
+                            </div>
+                            <div class="bg-rose-50 p-4 rounded-lg">
+                                <div class="font-bold text-rose-900 text-sm mb-1">🎯 適用對象</div>
+                                <div class="text-lg font-extrabold text-rose-700">反覆重度過敏或類固醇依賴者</div>
+                                <p class="text-xs text-gray-500 mt-2">若此階段仍發生嚴重過敏休克，需考慮評估「減敏療法」。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Standard Premedication Regimen (Optimized grid layout with Case 1 removed) -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6 border-b-4 border-teal-500 inline-block pb-2">標準 Premedication 藥物與劑量方案</h2>
+            <p class="text-lg mb-8 text-gray-600">
+                標準預防用藥是避免輕中度反應的最主要武器。以下是臨床上標準方案中的核心藥物劑量與對應的常規採用比例：
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Drug cards -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-xl shadow border-l-8 border-teal-500 p-6 flex items-start">
+                        <div class="text-4xl mr-4 mt-1">💊</div>
+                        <div>
+                            <h4 class="text-xl font-bold text-blue-900">解熱鎮痛劑 (Antipyretics)</h4>
+                            <div class="text-teal-600 font-semibold mb-2">Acetaminophen / Paracetamol</div>
+                            <div class="flex gap-4 text-sm bg-gray-50 p-2 rounded mb-2">
+                                <div><span class="font-bold">途徑：</span>口服 (PO)</div>
+                                <div><span class="font-bold">劑量：</span>500 - 1000 mg (兒童 10-15 mg/kg)</div>
+                            </div>
+                            <p class="text-gray-600 text-sm">作用：預防輸注期間可能產生的發燒、畏寒與肌肉痠痛。</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow border-l-8 border-amber-500 p-6 flex items-start">
+                        <div class="text-4xl mr-4 mt-1">💉</div>
+                        <div>
+                            <h4 class="text-xl font-bold text-blue-900">抗組織胺 (Antihistamines)</h4>
+                            <div class="text-amber-600 font-semibold mb-2">Diphenhydramine 或 Chlorpheniramine</div>
+                            <div class="flex gap-4 text-sm bg-gray-50 p-2 rounded mb-2">
+                                <div><span class="font-bold">途徑：</span>口服或靜脈慢速注射 (PO/IV)</div>
+                                <div><span class="font-bold">劑量：</span>Diphenhydramine 25 - 50 mg</div>
+                            </div>
+                            <p class="text-gray-600 text-sm">作用：阻斷 H1 受器，預防皮疹、紅斑、瘙癢及輕度氣道血管水腫。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drug Chart in standard grid position -->
+                <div class="bg-white rounded-xl shadow p-6 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-lg font-bold text-teal-600 mb-2">預防性給藥常規採用比例</h4>
+                        <p class="text-sm text-gray-500 mb-4">分析臨床預防給藥中，各類藥劑被納入標準方案的佔比：</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="drugChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Desensitization Therapy & Case Study (Renamed from Case Study 2) -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6 border-b-4 border-teal-500 inline-block pb-2">減敏療法 (Desensitization) ＆ 臨床案例</h2>
+            
+            <div class="bg-rose-50 border-l-8 border-rose-500 p-6 rounded-r-xl mb-8">
+                <h3 class="text-xl font-bold text-rose-800 mb-2">💡 臨床案例探討：重度過敏性休克 (Anaphylaxis) 與減敏療法</h3>
+                <p class="text-gray-700 leading-relaxed text-sm md:text-base">
+                    法布瑞氏症患者在接受酵素替代療法 (ERT) 時，有極少數人（特別是男性經典型患者）會產生 <strong>IgE 導向的過敏性反應</strong> 或 <strong>高滴度中和抗體</strong>。
+                    當患者在多次輸注中皆引發喉頭水腫、呼吸困難與嚴重低血壓 (70/40 mmHg) 等重度全身過敏性休克，且「抗組織胺 + 類固醇預防方案」宣告失敗時，臨床上不能輕易放棄酵素治療。此時，實施 <strong>多步驟快速靜脈減敏療法 (Rapid IV Desensitization)</strong> 是維持病人長期療效與生命安全的唯一選擇。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <!-- Desensitization Theory Card -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-blue-900 lg:col-span-1 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-lg font-bold text-blue-900 mb-4">減敏療法的生理學原理</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                            減敏療法藉由從<strong>極低濃度（通常為最終治療濃度的 1/100）</strong>開始，在數個小時內以倍數遞增的流速與濃度，分階段將酵素輸入患者體內。
+                        </p>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            此機制能使肥大細胞 (Mast cells) 與嗜鹼性球 (Basophils) 表面與 IgE 結合的受器發生緩慢、微量的去敏感化，<strong>消耗過敏顆粒而不引發全身性的過敏風暴</strong>。
+                        </p>
+                    </div>
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg text-xs text-blue-900 font-semibold border border-blue-100">
+                        ⚠️ 警告：減敏療法必須在加護病房 (ICU) 或具有完善急救設備（插管、Epinephrine）與專門過敏免疫科醫師監測之臨床環境下執行。
+                    </div>
+                </div>
+
+                <!-- Desensitization Step Interactive View -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-teal-500 lg:col-span-2">
+                    <h4 class="text-lg font-bold text-teal-800 mb-4">標準三袋法 (3-Bag Method) 12步驟快速減敏協議</h4>
+                    <p class="text-sm text-gray-500 mb-6">點擊下方不同稀釋比例的「輸注袋」，查看其對應的輸注流速遞增步驟：</p>
+
+                    <!-- Interactive Bags -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <button onclick="selectBag(1)" id="bag-btn-1" class="border-2 border-teal-500 bg-teal-50 hover:bg-teal-100 p-4 rounded-xl flex flex-col items-center transition-all duration-200">
+                            <span class="text-3xl mb-1">🧪</span>
+                            <span class="font-extrabold text-teal-800 text-xs md:text-sm">第一袋 (Bag A)</span>
+                            <span class="text-[10px] text-teal-600 font-bold mt-1">1:100 稀釋濃度</span>
+                        </button>
+                        <button onclick="selectBag(2)" id="bag-btn-2" class="border-2 border-transparent bg-gray-50 hover:bg-gray-100 p-4 rounded-xl flex flex-col items-center transition-all duration-200">
+                            <span class="text-3xl mb-1">🧪</span>
+                            <span class="font-extrabold text-gray-800 text-xs md:text-sm">第二袋 (Bag B)</span>
+                            <span class="text-[10px] text-gray-500 font-bold mt-1">1:10 稀釋濃度</span>
+                        </button>
+                        <button onclick="selectBag(3)" id="bag-btn-3" class="border-2 border-transparent bg-gray-50 hover:bg-gray-100 p-4 rounded-xl flex flex-col items-center transition-all duration-200">
+                            <span class="text-3xl mb-1">🧪</span>
+                            <span class="font-extrabold text-gray-800 text-xs md:text-sm">第三袋 (Bag C)</span>
+                            <span class="text-[10px] text-gray-500 font-bold mt-1">1:1 完整治療濃度</span>
+                        </button>
+                    </div>
+
+                    <!-- Steps Content based on selected bag -->
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div id="bag-info-1">
+                            <h5 class="font-bold text-teal-800 text-sm mb-3">第一袋：1:100 稀釋 (預防極早期超敏反應)</h5>
+                            <ul class="space-y-2.5 text-xs text-gray-700">
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-teal-500">
+                                    <span><strong>步驟 1:</strong> 以 2.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-teal-100 text-teal-800 px-2 py-0.5 rounded font-extrabold">極低劑量暴露</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-teal-500">
+                                    <span><strong>步驟 2:</strong> 以 5.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-teal-100 text-teal-800 px-2 py-0.5 rounded font-extrabold">速率遞增</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-teal-500">
+                                    <span><strong>步驟 3:</strong> 以 10.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-teal-100 text-teal-800 px-2 py-0.5 rounded font-extrabold">倍數提升</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-teal-500">
+                                    <span><strong>步驟 4:</strong> 以 20.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-teal-100 text-teal-800 px-2 py-0.5 rounded font-extrabold">第一階段完成</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="bag-info-2" class="hidden">
+                            <h5 class="font-bold text-amber-800 text-sm mb-3">第二袋：1:10 稀釋 (漸進式免疫耐受建立)</h5>
+                            <ul class="space-y-2.5 text-xs text-gray-700">
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-amber-500">
+                                    <span><strong>步驟 5:</strong> 以 5.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-extrabold">中等濃度起始</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-amber-500">
+                                    <span><strong>步驟 6:</strong> 以 10.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-extrabold">流速加倍</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-amber-500">
+                                    <span><strong>步驟 7:</strong> 以 20.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-extrabold">持續增加耐受</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-amber-500">
+                                    <span><strong>步驟 8:</strong> 以 40.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-extrabold">第二階段完成</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="bag-info-3" class="hidden">
+                            <h5 class="font-bold text-rose-800 text-sm mb-3">第三袋：1:1 完整治療濃度 (高風險維持階段)</h5>
+                            <ul class="space-y-2.5 text-xs text-gray-700">
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-rose-600">
+                                    <span><strong>步驟 9:</strong> 以 10.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-extrabold">完整濃度導入</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-rose-600">
+                                    <span><strong>步驟 10:</strong> 以 20.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-extrabold">流速穩步提升</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-rose-600">
+                                    <span><strong>步驟 11:</strong> 以 40.0 mL/hr 速度滴注 15 分鐘</span>
+                                    <span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-extrabold">進入中高流速</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white p-2 rounded shadow-sm border-l-4 border-rose-600">
+                                    <span><strong>步驟 12:</strong> 以 80.0 ~ 120.0 mL/hr 持續滴注至全量輸完</span>
+                                    <span class="bg-rose-600 text-white px-2 py-0.5 rounded font-extrabold">最終滴注</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: SOP flowchart for IRR management -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6 border-b-4 border-teal-500 inline-block pb-2">發生 IRR 時的處置流程 (SOP)</h2>
+            <p class="text-lg mb-8 text-gray-600">
+                即使給予了預防用藥（Premedication），仍需密切監測患者。若在輸注過程中發生不良反應，臨床護理人員應立即遵循以下標準作業流程：
+            </p>
+
+            <div class="bg-white p-8 rounded-xl shadow-md max-w-2xl mx-auto">
+                <div class="flex flex-col items-center">
+                    <div class="bg-blue-900 text-white font-bold py-3 px-8 rounded-full shadow-lg w-full max-w-xs text-center z-10">
+                        觀察到輸注相關反應 (IRR)
+                    </div>
+                    
+                    <div class="flow-line"></div>
+                    <div class="flow-arrow"></div>
+
+                    <div class="bg-amber-500 text-white font-bold py-3 px-8 rounded shadow-lg w-full max-w-sm text-center z-10 my-2">
+                        立即暫停輸注或大幅降低滴速
+                    </div>
+
+                    <div class="flow-line"></div>
+                    <div class="flow-arrow"></div>
+
+                    <div class="bg-teal-500 text-white font-bold py-3 px-8 rounded shadow-lg w-full max-w-sm text-center z-10 my-2">
+                        重新評估生命徵象與症狀嚴重度
+                    </div>
+
+                    <div class="w-full flex justify-center gap-10 mt-6 relative">
+                        <div class="absolute top-0 w-1/2 h-1 bg-teal-500 -z-10"></div>
+                        <div class="absolute top-0 left-1/4 w-1 h-6 bg-teal-500 -z-10"></div>
+                        <div class="absolute top-0 right-1/4 w-1 h-6 bg-teal-500 -z-10"></div>
+                        
+                        <div class="w-1/2 mt-6 flex flex-col items-center">
+                            <div class="border-2 border-rose-600 bg-rose-50 text-rose-800 font-bold py-2 px-4 rounded text-center w-full mb-4">
+                                症狀嚴重 (如：呼吸窘迫、休克)
+                            </div>
+                            <div class="text-sm bg-gray-100 p-3 rounded text-center w-full shadow-inner">
+                                終止本次輸注<br>給予緊急處置與抗組織胺/類固醇注射<br>(必要時給予 Epinephrine)
+                            </div>
+                        </div>
+
+                        <div class="w-1/2 mt-6 flex flex-col items-center">
+                            <div class="border-2 border-blue-900 bg-blue-50 text-blue-900 font-bold py-2 px-4 rounded text-center w-full mb-4">
+                                症狀輕微至中度
+                            </div>
+                            <div class="text-sm bg-gray-100 p-3 rounded text-center w-full shadow-inner">
+                                給予額外抗組織胺/解熱鎮痛劑<br>待症狀緩解後，以 1/2 滴速重啟輸注
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SECTION 6: References -->
+        <div class="mt-16 pt-8 border-t border-gray-300 text-sm text-gray-500">
+            <h5 class="font-bold mb-2 uppercase tracking-wide">引用及參考文獻 (Academic References):</h5>
+            <ol class="list-decimal pl-5 space-y-2">
+                <li>EMA (European Medicines Agency). <strong>Replagal (agalsidase alfa) Summary of Product Characteristics (SmPC)</strong>. [Section 4.4 Special warnings and precautions for use: Pretreatment with antihistamines and/or corticosteroids 1 to 24 hours prior to infusion].</li>
+                <li>Ortiz, A., et al. "<strong>Fabry disease revisited: Management and treatment recommendations for adult patients</strong>." <i>Molecular Genetics and Metabolism</i>, 2018. [Discusses IRR management and general premedication strategies].</li>
+                <li>Aydin, O., Kasapkara, C. S., & Celik, G. E. "<strong>Successful desensitization with agalsidase alfa in two brothers with Fabry disease</strong>." <i>Journal of Investigational Allergology and Clinical Immunology</i>, 2013, Vol. 23(5): 367-368. [Primary clinical evidence for multi-step agalsidase alfa desensitization protocol].</li>
+                <li>Talreja, N., Butt, A., Valle, R. L., Fox, R. W., & Lockey, R. F. "<strong>Successful desensitization to agalsidase beta and alpha after anaphylaxis in patients with Fabry disease</strong>." <i>Annals of Allergy, Asthma & Immunology</i>, 2014. [Outlining the multi-bag dilution desensitization protocol].</li>
+                <li>Biegstraaten, M., et al. "<strong>Recommendations for initiating and stopping enzyme replacement therapy in patients with Fabry disease</strong>." <i>Orphanet Journal of Rare Diseases</i>, 2015. [Practical guidelines on standard antipyretics and antihistamines premedication timing].</li>
+            </ol>
+        </div>
+    </main>
+
+    <script>
+        // Tab switching logic for Source Guidelines
+        function switchSourceTab(tabId) {
+            // Remove active classes from all tabs
+            document.getElementById('tab-ema').className = 'flex-1 py-4 px-6 text-center font-bold text-sm md:text-base border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all duration-200';
+            document.getElementById('tab-consensus').className = 'flex-1 py-4 px-6 text-center font-bold text-sm md:text-base border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all duration-200';
+            document.getElementById('tab-highrisk').className = 'flex-1 py-4 px-6 text-center font-bold text-sm md:text-base border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all duration-200';
+            
+            // Hide all tab contents
+            document.getElementById('content-ema').classList.add('hidden');
+            document.getElementById('content-consensus').classList.add('hidden');
+            document.getElementById('content-highrisk').classList.add('hidden');
+            
+            // Activate selected tab and content
+            if (tabId === 'ema') {
+                document.getElementById('tab-ema').className = 'flex-1 py-4 px-6 text-center font-bold text-sm md:text-base border-b-2 border-teal-500 text-teal-600 transition-all duration-200';
+                document.getElementById('content-ema').classList.remove('hidden');
+            } else if (tabId === 'consensus') {
+                document.getElementById('tab-consensus').className = 'flex-1 py-4 px-6 text-center font-bold text-sm md:text-base border-b-2 border-teal-500 text-teal-600 transition-all duration-200';
+                document.getElementById('content-consensus').classList.remove('hidden');
+            } else if (tabId === 'highrisk') {
+                document.getElementById('tab-highrisk').className = 'flex-1 py-4 px-6 text-center font-bold text-sm md:text-base border-b-2 border-teal-500 text-teal-600 transition-all duration-200';
+                document.getElementById('content-highrisk').classList.remove('hidden');
+            }
+        }
+
+        // Interactive desensitization bags logic
+        function selectBag(bagNum) {
+            // Reset all bag styles
+            document.getElementById('bag-btn-1').className = 'border-2 border-transparent bg-gray-50 hover:bg-gray-100 p-4 rounded-xl flex flex-col items-center transition-all duration-200';
+            document.getElementById('bag-btn-2').className = 'border-2 border-transparent bg-gray-50 hover:bg-gray-100 p-4 rounded-xl flex flex-col items-center transition-all duration-200';
+            document.getElementById('bag-btn-3').className = 'border-2 border-transparent bg-gray-50 hover:bg-gray-100 p-4 rounded-xl flex flex-col items-center transition-all duration-200';
+            
+            // Hide all lists
+            document.getElementById('bag-info-1').classList.add('hidden');
+            document.getElementById('bag-info-2').classList.add('hidden');
+            document.getElementById('bag-info-3').classList.add('hidden');
+            
+            // Display active bag styles and steps
+            if (bagNum === 1) {
+                document.getElementById('bag-btn-1').className = 'border-2 border-teal-500 bg-teal-50 hover:bg-teal-100 p-4 rounded-xl flex flex-col items-center transition-all duration-200';
+                document.getElementById('bag-info-1').classList.remove('hidden');
+            } else if (bagNum === 2) {
+                document.getElementById('bag-btn-2').className = 'border-2 border-amber-500 bg-amber-50 hover:bg-amber-100 p-4 rounded-xl flex flex-col items-center transition-all duration-200';
+                document.getElementById('bag-info-2').classList.remove('hidden');
+            } else if (bagNum === 3) {
+                document.getElementById('bag-btn-3').className = 'border-2 border-rose-600 bg-rose-50 hover:bg-rose-100 p-4 rounded-xl flex flex-col items-center transition-all duration-200';
+                document.getElementById('bag-info-3').classList.remove('hidden');
+            }
+        }
+
+        // Labels wrapping logic for better mobile support
+        const wrapLabel = (label) => {
+            if (label.length > 16) {
+                const words = label.split(' ');
+                let lines = [];
+                let currentLine = '';
+                words.forEach(word => {
+                    if ((currentLine + word).length > 16) {
+                        if (currentLine.trim() !== '') lines.push(currentLine.trim());
+                        currentLine = word + ' ';
+                    } else {
+                        currentLine += word + ' ';
+                    }
+                });
+                if (currentLine.trim() !== '') lines.push(currentLine.trim());
+                return lines;
+            }
+            return label;
+        };
+
+        // Donut Chart initialization
+        const ctxIrr = document.getElementById('irrChart').getContext('2d');
+        const rawIrrLabels = ['發生 輸注相關 反應 (IRRs)', '無發生 明顯不良 反應 (No IRRs)'];
+        const irrLabels = rawIrrLabels.map(wrapLabel);
+
+        new Chart(ctxIrr, {
+            type: 'doughnut',
+            data: {
+                labels: irrLabels,
+                datasets: [{
+                    data: [13.7, 86.3],
+                    backgroundColor: ['#E11D48', '#14B8A6'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                    return label.join(' ');
+                                } else {
+                                    return label;
+                                }
+                            },
+                            label: function(context) {
+                                return ' ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Bar Chart initialization
+        const ctxDrug = document.getElementById('drugChart').getContext('2d');
+        const rawDrugLabels = ['解熱鎮痛劑 (Acetaminophen)', '抗組織胺 (Diphenhydramine)', '皮質類固醇 (Hydrocortisone)'];
+        const drugLabels = rawDrugLabels.map(wrapLabel);
+
+        new Chart(ctxDrug, {
+            type: 'bar',
+            data: {
+                labels: drugLabels,
+                datasets: [{
+                    label: '常規給藥採用率 (%)',
+                    data: [100, 100, 20],
+                    backgroundColor: ['#14B8A6', '#F59E0B', '#E11D48'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: '#E5E7EB'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                    return label.join(' ');
+                                } else {
+                                    return label;
+                                }
+                            },
+                            label: function(context) {
+                                return ' ' + context.parsed.x + '% 的病例';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
